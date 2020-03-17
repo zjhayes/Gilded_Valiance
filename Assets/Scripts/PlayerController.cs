@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 bottomLeftLimit;
     private Vector3 topRightLimit;
+
+    public bool canMove = true;
     
     void Start()
     {
@@ -33,17 +35,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        physics.velocity = new Vector2(Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical")) * moveSpeed;
+        if(canMove)
+        {
+            physics.velocity = new Vector2(Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical")) * moveSpeed;
+            
+        }
+        else
+        {
+            physics.velocity  = Vector2.zero;
+        }
 
         // Update animations.
         animator.SetFloat("moveX", physics.velocity.x);
         animator.SetFloat("moveY", physics.velocity.y);
 
-        if(Input.GetAxisRaw("Horizontal") >= 1 ||
+        if((Input.GetAxisRaw("Horizontal") >= 1 ||
             Input.GetAxisRaw("Horizontal") <= -1 ||
             Input.GetAxisRaw("Vertical") >= 1 ||
-            Input.GetAxisRaw("Vertical") <= -1)
+            Input.GetAxisRaw("Vertical") <= -1) && canMove)
         {
             animator.SetFloat("lastMoveX", Input.GetAxisRaw("Horizontal"));
             animator.SetFloat("lastMoveY", Input.GetAxisRaw("Vertical"));
